@@ -5,6 +5,7 @@ import NotesList, { NotesListStyles } from "~/components/notes-list/NotesLists";
 import { createNote, getStoredNotes } from "~/db/notes";
 import { validator } from "utilities/Tools";
 import { Fragment } from "react";
+import subData from "../db/notes";
 export const links = () => ([NewnoteStyles, NotesListStyles]);
 
 export const action = async ({ request }) => {
@@ -29,7 +30,7 @@ export const action = async ({ request }) => {
 };
 
 export const loader = async () => {
-  const notes = await getStoredNotes();
+  let notes = await getStoredNotes();
   //OPTION 1
   // return new Response(JSON.stringify(notes), {
   //   headers: { 'Content-Type': 'application/json' }
@@ -38,12 +39,7 @@ export const loader = async () => {
   //return json(notes);
   //OPTION 3
   if (!notes || notes.length === 0) {
-    throw json({
-      message: "Notes not found"
-    }, {
-      status: 404,
-      statusText: "Not found"
-    })
+    notes = subData.notes;
   }
   return notes;
 };
